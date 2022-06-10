@@ -27,7 +27,7 @@ impl Camera{
         let screenX = x * (W / w) - (W / 2.0);
         let screenY = y * (H / h) - (H / 2.0);
 
-        let screen_pos = Vec3::new(screenX, screenX / aspect_ratio, 0.0);
+        let screen_pos = Vec3::new(screenX, screenY / aspect_ratio, 0.0);
         let dir = screen_pos - focalPoint;
         let mut ray = Ray::new(screen_pos, dir.normalize());
         let mut global_ray = self.transform.transform_ray_from_local_to_global(&ray);

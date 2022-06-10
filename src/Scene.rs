@@ -7,6 +7,7 @@ use crate::HitInfoCollector::HitInfoCollector;
 use crate::Camera::Camera;
 use crate::VecExtension::VectorExtension;
 
+
 pub struct Scene{
     pub objects: Vec<Box<dyn Hittable>>,
     pub camera: Camera
@@ -18,7 +19,7 @@ impl Scene{
         self.objects.push(obj);
     }
 
-    pub fn closest_intersected(&mut self, ray: &Ray) -> HitInfoCollector {
+    pub fn closest_intersected(&self, ray: &mut Ray) -> HitInfoCollector {
         let mut closest_t = f32::INFINITY;
         let mut closestHitInfo = HitInfoCollector::default();
         for object in self.objects.iter()

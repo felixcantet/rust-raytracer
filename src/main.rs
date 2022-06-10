@@ -9,9 +9,12 @@ mod Sphere;
 mod Scene;
 mod VecExtension;
 mod Renderer;
+mod Tracer;
+mod ImageWriter;
 
 use glam::{Mat4, Vec4, Affine3A, Vec3, Quat, EulerRot};
 use crate::VecExtension::VectorExtension;
+use std::time::Instant;
 
 fn main() {
 
@@ -47,14 +50,18 @@ fn main() {
 
 fn Render()
 {
+    let now = Instant::now();
     let mut scene = Scene::Scene{
         objects: Vec::new(),
-        camera: Camera::Camera::new(10.0, Vec3::left() * 10.0, Vec3::zero())
+        camera: Camera::Camera::new(1.0, Vec3::left() * 5.0, Vec3::zero())
     };
     // scene.camera.transform = Transform::Transform::default();
     // scene.camera.transform.translate(Vec3::back() * 10.0);
     // //scene.camera.transform.rotate(Vec3::new(0.0, -180.0, 0.0));
-    let sphere = Sphere::Sphere::new(Vec3::zero(), Vec3::one());
+    let sphere = Sphere::Sphere::new(Vec3::forward(), Vec3::one());
+    scene.add_object_to_scene(Box::new(sphere));
+
+    let sphere = Sphere::Sphere::new(Vec3::back() + Vec3::right(), Vec3::one());
     scene.add_object_to_scene(Box::new(sphere));
 
     // for i in 0..10{
@@ -63,10 +70,16 @@ fn Render()
     //         Vec3::forward() * z,
     //         Vec3::one() * (1.0 / (i + 1) as f32)
     //     );
-    //     scene.add_object_to_scene(Box::new(sphere));
+    //     scene.add_object_to_scene(Box::new(sphere) as Box<dyn Hittable::Hittable + Send + Sync>);
     // }
 
-    Renderer::Render(&mut scene, 512, 288);
+    let settings = Tracer::RenderSettings::new(4, 512, 288, 4);
+    let mut tracer = Tracer::Tracer::new(scene, settings);
+
+    tracer.render();
+
+   // Renderer::Render(&mut scene, 512, 288);
+    println!("{}", now.elapsed().as_secs_f64());
 }
 
 #[test]

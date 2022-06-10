@@ -1,4 +1,5 @@
 use glam::Vec3;
+use std::iter::Sum;
 
 pub trait VectorExtension{
     fn zero() -> Self;
@@ -44,3 +45,6 @@ impl VectorExtension for Vec3{
         Vec3::new(0.0, 0.0, -1.0)
     }
 }
+
+struct Bar;
+
